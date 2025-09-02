@@ -1,5 +1,8 @@
 # Pascoal • Bloco 1 — Fundamentos de Programação + App Web
 
+[![CI](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml)
+
+
 Pequeno projeto didático para treinar **programação + testes + app web** focado em rotinas úteis de Data Science.
 
 ## O que tem aqui

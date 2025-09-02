@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/pasqalib/__init__.py
+src/pasqalib/cli.py
+src/pasqalib/utils.py
+src/pasqalib.egg-info/PKG-INFO
+src/pasqalib.egg-info/SOURCES.txt
+src/pasqalib.egg-info/dependency_links.txt
+src/pasqalib.egg-info/top_level.txt
+tests/test_utils.py

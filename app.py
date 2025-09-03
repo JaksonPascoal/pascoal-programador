@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from io import StringIO
 from pasqalib.utils import (
     normalize_text, count_words,
     fibonacci, fibonacci_list,
@@ -54,43 +53,65 @@ with tabs[3]:
 
     up = st.file_uploader("Envie um arquivo .csv", type=["csv"])
     if up is not None:
-        # tentamos ler com inferência de separador
+        # tentar inferir separador
         try:
             df = pd.read_csv(up, sep=None, engine="python")
         except Exception:
-            # fallback simples
             up.seek(0)
             df = pd.read_csv(up)
 
         st.write("Prévia do CSV:")
         st.dataframe(df.head(10), use_container_width=True)
 
-        # sugere colunas de texto (object/string), mas permite qualquer uma
-        text_cols = [c for c in df.columns if df[c].dtype == "object" or str(df[c].dtype).startswith("string")]
-        col_sel = st.selectbox("Escolha a coluna de texto para processar:", options=df.columns, index=(df.columns.get_indexer([text_cols[0]])[0] if text_cols else 0))
+        # sugerir colunas de texto (object/string) — mas permitir qualquer uma
+        text_cols = [
+            c for c in df.columns
+            if df[c].dtype == "object" or str(df[c].dtype).startswith("string")
+        ]
+
+        # Mostrar apenas labels str no selectbox e mapear de volta para o nome original
+        cols = list(df.columns)                 # nomes originais (podem ser int64 etc.)
+        labels = [str(c) for c in cols]         # o que aparece no selectbox
+        default_label = str(text_cols[0]) if text_cols else labels[0]
+        try:
+            default_index = labels.index(default_label)
+        except ValueError:
+            default_index = 0
+
+        label_escolhida = st.selectbox(
+            "Escolha a coluna de texto para processar:",
+            options=labels,
+            index=default_index,
+        )
+        # nome ORIGINAL da coluna selecionada
+        col_sel = cols[labels.index(label_escolhida)]
 
         c1, c2 = st.columns(2)
         with c1:
-            do_norm = st.checkbox("Normalizar texto", value=True,
-                                  help="minúsculas, sem acentos, espaços colapsados")
+            do_norm = st.checkbox(
+                "Normalizar texto", value=True,
+                help="minúsculas, sem acentos, espaços colapsados"
+            )
         with c2:
             do_wc = st.checkbox("Adicionar contagem de palavras", value=True)
 
-        new_name = st.text_input("Nome da coluna normalizada (se aplicável):", value=f"{col_sel}_norm")
+        new_name = st.text_input(
+            "Nome da coluna normalizada (se aplicável):",
+            value=f"{col_sel}_norm"
+        )
 
         if st.button("Limpar e gerar CSV"):
             df_out = df.copy()
-
             source_series = df_out[col_sel]
 
             if do_norm:
-                df_out[new_name] = source_series.astype("string").apply(lambda x: normalize_text(x))
+                df_out[new_name] = source_series.astype("string").apply(normalize_text)
                 base_for_count = df_out[new_name]
             else:
                 base_for_count = source_series.astype("string")
 
             if do_wc:
-                df_out[f"{col_sel}_wc"] = base_for_count.apply(lambda x: count_words(x))
+                df_out[f"{col_sel}_wc"] = base_for_count.apply(count_words)
 
             st.success("Processado! Prévia:")
             st.dataframe(df_out.head(10), use_container_width=True)
@@ -102,3 +123,5 @@ with tabs[3]:
                 file_name="csv_processado.csv",
                 mime="text/csv",
             )
+    else:
+        st.info("Envie um CSV para começar.")

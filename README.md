@@ -52,14 +52,18 @@ Certifique-se de ter o Python 3.10+ e o `pip` atualizado:
 ```bash
 python -m pip install --upgrade pip
 
-Instalação e Execução
+## Instalação e Execução
 
-1. Clone o repositório:
+> Requer Python 3.10+ e pip atualizado:
+```bash
+python -m pip install --upgrade pip
 
-git clone [https://github.com/JaksonPascoal/pascoal-programador.git](https://github.com/JaksonPascoal/pascoal-programador.git)
+1) Clonar o repositório
+
+git clone https://github.com/JaksonPascoal/pascoal-programador.git
 cd pascoal-programador
 
-2. Crie e ative um ambiente virtual:
+2) Criar e ativar o ambiente virtual
 
 # (opcional, mas recomendado)
 python -m venv .venv
@@ -70,57 +74,64 @@ python -m venv .venv
 # Linux/Mac
 source .venv/bin/activate
 
-3. Instale as dependências:
+3) Instalar dependências e o pacote
 
 pip install -r requirements.txt
-pip install -e .  # Instala o pacote local em modo editável
+pip install -e .   # instala o pacote local em modo editável
 
-4. Execute os testes:
+4) Executar os testes
 
 pytest -q
 
-5. Inicie a aplicação web:
+5) Iniciar a aplicação web
 
 streamlit run app.py
 
-6. Use a CLI:
+CLI — exemplos
 
 # Normalizar um texto
-python -m pasqalib.cli --norm "  ÁGUA   É   VIDA  "
+python -m pasqalib.cli --norm "  AGUA   E   VIDA  "
 
 # Contar palavras
-python -m pasqalib.cli --wc "Olá, mundo! Isto é um teste"
+python -m pasqalib.cli --wc "Ola, mundo! Isto e um teste"
 
 # Gerar Fibonacci
 python -m pasqalib.cli --fib 12
 
+# Testar primo e próximo primo
+python -m pasqalib.cli --prime 97
+python -m pasqalib.cli --next-prime 14
+
+# Conceito da nota
+python -m pasqalib.cli --grade 95
+
 📂 Estrutura do Projeto
 
 .
-├── app.py                     # Aplicação web Streamlit
-├── requirements.txt           # Dependências do projeto
-├── pyproject.toml             # Configurações do projeto
-├── src/                       # Código-fonte principal
+├── app.py                     # Aplicação web (Streamlit)
+├── requirements.txt           # Dependências
+├── pyproject.toml             # Metadados do pacote
+├── src/
 │   └── pasqalib/
 │       ├── __init__.py
-│       ├── cli.py             # Lógica da CLI
-│       └── utils.py           # Funções utilitárias
+│       ├── cli.py            # CLI (argparse)
+│       └── utils.py          # Funções utilitárias
 └── tests/
-    └── test_utils.py          # Testes com pytest
+    └── test_utils.py         # Testes com pytest
 
 🧠 Lições Aprendidas
-Este projeto serviu como uma base sólida para entender conceitos fundamentais no desenvolvimento de software e Data Science:
 
-Reprodutibilidade: O uso de ambientes virtuais (venv) e o gerenciamento de dependências (requirements.txt) garantem que o projeto possa ser executado em qualquer ambiente sem conflitos.
+Reprodutibilidade: venv + requirements garantem ambiente limpo.
 
-Qualidade do Código: A prática de escrever testes (pytest) antes ou durante a codificação ajuda a garantir a qualidade, a confiabilidade e a estabilidade do software.
+Qualidade: testes com pytest evitam regressões.
 
-Automação: A criação de uma interface de linha de comando (CLI) demonstra como é possível automatizar tarefas e interagir com o código de forma programática.
+Automação: CLI para rodar rotinas por terminal/servidor.
 
-Produto: A construção de uma aplicação web interativa (Streamlit) mostra como empacotar e disponibilizar uma funcionalidade como um produto final para usuários não técnicos.
+Produto: Streamlit expõe as funções em interface web.
 
-Pré-processamento de Texto: A inclusão de rotinas como normalize_text e count_words é uma prática essencial em pipelines de Processamento de Linguagem Natural (NLP) e ETL (Extract, Transform, Load).
+Pré-processamento de texto: normalize_text e count_words (NLP/ETL).
 
 📄 Licença
 
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para detalhes.
+

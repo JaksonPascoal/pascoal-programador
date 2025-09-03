@@ -3,6 +3,8 @@
 import math
 import re
 import unicodedata
+from collections import Counter
+
 
 def normalize_text(s: str) -> str:
     """Converte para minúsculas, remove acentos e colapsa espaços. Se `s` for None, retorna ""."""
@@ -89,3 +91,20 @@ def count_chars(s: str) -> int:
     """Conta caracteres alfanuméricos após normalizar (letras e dígitos)."""
     s = normalize_text(s)
     return sum(ch.isalnum() for ch in s)
+
+def word_freqs(s: str) -> dict[str, int]:
+    """Retorna a frequência de palavras após normalizar e remover pontuação.
+    - Normaliza com `normalize_text`
+    - Remove caracteres não alfanuméricos (mantém espaços)
+    - Separa por espaços e ignora vazios
+    Ex.: "Água é vida. Água!" -> {"agua": 2, "e": 1, "vida": 1}
+    """
+    s = normalize_text(s)
+    if s == "":
+        return {}
+
+    # remove tudo que NÃO é a-z, 0-9 ou espaço → vira espaço
+    s = re.sub(r"[^a-z0-9\s]+", " ", s)
+
+    tokens = s.split()  # divide por qualquer quantidade de espaços
+    return dict(Counter(tokens))

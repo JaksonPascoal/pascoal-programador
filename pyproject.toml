@@ -1,5 +1,27 @@
 [project]
 name = "pasqalib"
 version = "0.1.0"
-requires-python = ">=3.9"
-description = "Kata Bloco 1 — Fundamentos"
+description = "Utilitários de texto e números (Bloco 1)"
+requires-python = ">=3.11"
+
+# ⇩⇩⇩ ESTE BLOCO CRIA O COMANDO "pasqa"
+[project.scripts]
+pasqa = "pasqalib.cli:main"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "B"]
+ignore = ["E203", "E501"]
+target-version = "py311"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# (se não tiver, acrescente no fim)
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

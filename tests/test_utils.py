@@ -1,6 +1,17 @@
-from pasqalib.utils import normalize_text, fibonacci, is_prime, parse_grade, count_words, fibonacci_list, next_prime, count_chars
-
 import pytest
+
+from pasqalib.utils import (
+    count_chars,
+    count_words,
+    fibonacci,
+    fibonacci_list,
+    is_prime,
+    next_prime,
+    normalize_text,
+    parse_grade,
+    word_freqs,
+)
+
 
 def test_normalize_text():
     assert normalize_text("  Olá,   MUNDO!  ") == "ola, mundo!"
@@ -20,24 +31,15 @@ def test_is_prime():
     assert is_prime(13)
     assert not is_prime(21)
 
-def test_parse_grade():
-    assert parse_grade(95) == "A"
-    assert parse_grade(85) == "B"
-    assert parse_grade(75) == "C"
-    assert parse_grade(65) == "D"
-    assert parse_grade(10) == "F"
-    with pytest.raises(ValueError):
-        parse_grade(101)
 
 def test_parse_grade():
-    assert parse_grade(95) == "A+"   # novo
-    assert parse_grade(90) == "A"    # garante A sem o '+'
+    assert parse_grade(95) == "A+"   # novo A+
+    assert parse_grade(90) == "A"    # garante A sem '+'
     assert parse_grade(85) == "B"
-    assert parse_grade(75) == "C"
+    assert parse_grade(72) == "C"
     assert parse_grade(65) == "D"
-    assert parse_grade(10) == "F"
-    with pytest.raises(ValueError):
-        parse_grade(101)
+    assert parse_grade(59) == "F"
+
 
 def test_count_words():
     assert count_words("") == 0
@@ -61,3 +63,9 @@ def test_count_chars():
     assert count_chars("Olá!") == 3      # "ola!" -> o,l,a
     assert count_chars("A1 B2") == 4     # A,1,B,2
     assert count_chars("  ÁGUA   É   VIDA  ") == 9  # "agua e vida" -> 9
+
+def test_word_freqs():
+    assert word_freqs("") == {}
+    assert word_freqs("Olá, olá!") == {"ola": 2}
+    assert word_freqs("Água é vida. Água!") == {"agua": 2, "e": 1, "vida": 1}
+

@@ -1,15 +1,20 @@
-import streamlit as st
 import pandas as pd
+import streamlit as st
+
 from pasqalib.utils import (
-    normalize_text, count_words,
-    fibonacci, fibonacci_list,
-    is_prime, next_prime, parse_grade
+    count_words,
+    fibonacci,
+    fibonacci_list,
+    is_prime,
+    next_prime,
+    normalize_text,  # agora com word_freqs
+    parse_grade,
+    word_freqs,
 )
 
 # 1ª chamada Streamlit
-st.set_page_config(page_title="Pascoal • Bloco 1", page_icon="📊", layout="centered")
-
-st.title("Bloco 1 — App Web (Pascoal)")
+st.set_page_config(page_title="Pascoal | Python Project Template", page_icon="📊", layout="centered")
+st.title("Python Project Template — CLI, Tests & Streamlit")
 st.caption("JkPascoal")
 
 tabs = st.tabs(["📝 Texto", "🔢 Números", "🏷️ Notas", "🧼 Clean CSV"])
@@ -95,6 +100,9 @@ with tabs[3]:
         with c2:
             do_wc = st.checkbox("Adicionar contagem de palavras", value=True)
 
+        # NOVO: opção de frequências agregadas
+        do_freqs = st.checkbox("Gerar frequências de palavras (agregado)", value=True)
+
         new_name = st.text_input(
             "Nome da coluna normalizada (se aplicável):",
             value=f"{col_sel}_norm"
@@ -105,16 +113,39 @@ with tabs[3]:
             source_series = df_out[col_sel]
 
             if do_norm:
-                df_out[new_name] = source_series.astype("string").apply(normalize_text)
+                df_out[new_name] = (
+                    source_series.astype("string").fillna("").apply(normalize_text)
+                )
                 base_for_count = df_out[new_name]
             else:
-                base_for_count = source_series.astype("string")
+                base_for_count = source_series.astype("string").fillna("")
 
             if do_wc:
                 df_out[f"{col_sel}_wc"] = base_for_count.apply(count_words)
 
-            st.success("Processado! Prévia:")
+            st.success("Processado! Prévia do CSV gerado:")
             st.dataframe(df_out.head(10), use_container_width=True)
+
+            # NOVO: frequências de palavras agregadas na coluna
+            if do_freqs:
+                all_text = " ".join(list(base_for_count))
+                freqs = word_freqs(all_text)
+                df_freq = (
+                    pd.DataFrame(freqs.items(), columns=["palavra", "frequencia"])
+                    .sort_values("frequencia", ascending=False)
+                    .reset_index(drop=True)
+                )
+                st.caption("Top 20 palavras:")
+                st.dataframe(df_freq.head(20), use_container_width=True)
+                st.bar_chart(df_freq.head(20).set_index("palavra")["frequencia"])
+
+                csv_freq = df_freq.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    label="⬇️ Baixar frequências (CSV)",
+                    data=csv_freq,
+                    file_name=f"freq_palavras_{str(col_sel)}.csv",
+                    mime="text/csv",
+                )
 
             csv_bytes = df_out.to_csv(index=False).encode("utf-8")
             st.download_button(

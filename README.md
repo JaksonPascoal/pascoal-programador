@@ -1,137 +1,162 @@
-# Pascoal | Fundamentos de Programação + App Web
+# Pascoal | Python Project Template: CLI, Tests & Streamlit
 
-[![CI](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml)
+Projeto didático focado em programação, testes e desenvolvimento web para explorar rotinas úteis de Data Science. É o primeiro bloco de estudo, cobrindo conceitos essenciais de Python e sua aplicação em um produto simples (CLI + App Web).
 
-Um projeto didático focado em **programação, testes e desenvolvimento web** para explorar rotinas úteis de **Data Science**. Este repositório é o primeiro bloco de um estudo aprofundado, cobrindo conceitos essenciais de Python e sua aplicação em um projeto prático.
+📝 Sumário
 
----
+Funcionalidades
 
-### 📝 Sumário
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias](#-tecnologias)
-- [Como Rodar](#-como-rodar)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Lições Aprendidas](#-lições-aprendidas)
-- [Licença](#-licença)
+Tecnologias
 
----
+Como Rodar
 
-### ✨ Funcionalidades
+Estrutura do Projeto
 
-O projeto é composto por um pacote Python, uma interface de linha de comando (CLI) e uma aplicação web interativa:
+Lições Aprendidas
 
-* **Pacote Python (`pasqalib`):**
-    * **Limpeza e contagem de texto:** funções `normalize_text` e `count_words`.
-    * **Lógica e algoritmos:** `fibonacci`, `fibonacci_list`, `is_prime` e `next_prime`.
-    * **Regras de negócio:** `parse_grade` para converter notas em conceitos (A+/A/B/C/D/F).
+Licença
 
-* **CLI (Interface de Linha de Comando):**
-    * `python -m pasqalib.cli --help` para ver todas as opções.
+✨ Funcionalidades
 
-* **App Web (Streamlit):**
-    * **Texto:** Normaliza e conta palavras de um texto inserido.
-    * **Números:** Gera sequências de Fibonacci e identifica números primos.
-    * **Notas:** Converte notas numéricas para conceitos.
-    * **Clean CSV:** Permite enviar um arquivo CSV, processar uma coluna de texto (normalizar e contar palavras) e fazer o download do arquivo processado.
+O projeto tem três faces: pacote Python, CLI e App Web.
 
----
+Pacote Python (pasqalib)
 
-### 🛠️ Tecnologias
+Texto / NLP básica
 
-* Python 3.10+
-* `pytest` para testes
-* `streamlit` para a aplicação web
-* `pandas` para manipulação de dados
+normalize_text(s) — minúsculas, remove acentos, colapsa espaços.
 
----
+count_words(s) — conta palavras após normalizar.
 
-### 🚀 Como Rodar
+count_chars(s) — conta caracteres alfanuméricos (útil pra limpeza).
 
-#### Pré-requisitos
-Certifique-se de ter o Python 3.10+ e o `pip` atualizado:
-```bash
-python -m pip install --upgrade pip
+word_freqs(s) — frequência de palavras (normaliza e ignora pontuação).
 
-## Instalação e Execução
+Números / Algoritmos
 
-> Requer Python 3.10+ e pip atualizado:
-```bash
-python -m pip install --upgrade pip
+fibonacci(n), fibonacci_list(n)
 
+is_prime(n), next_prime(n)
+
+Regras de negócio
+
+parse_grade(score) — converte nota 0–100 em conceito A+/A/B/C/D/F.
+
+CLI (Interface de Linha de Comando)
+
+Instalação em modo editável cria o comando pasqa:
+
+pasqa --help
+
+
+Exemplos:
+
+pasqa --norm "  ÁGUA   É   VIDA  "
+pasqa --wc   "Olá, mundo! Isto é um teste"
+pasqa --cc   "Água é vida!"
+pasqa --freq "Olá, olá! água é vida. Água!"         # dicionário de frequências
+pasqa --freq "Olá, olá! água é vida. Água!" --top 3 # top-N frequências
+pasqa --fib 12
+pasqa --prime 97
+pasqa --next-prime 14
+pasqa --grade 95
+
+
+Dica: se preferir, também funciona via módulo:
+python -m pasqalib.cli --help
+
+App Web (Streamlit)
+
+Texto: normaliza e conta palavras.
+
+Números: Fibonacci e primos.
+
+Notas: conceito a partir da nota.
+
+Clean CSV:
+
+Faz upload de CSV;
+
+Processa uma coluna de texto (normalização + contagem por linha);
+
+Gera frequências agregadas da coluna (Top 20 + download);
+
+Permite baixar o CSV processado.
+
+🛠️ Tecnologias
+
+Python 3.11+
+
+pytest (testes)
+
+streamlit (aplicação web)
+
+pandas (manipulação de dados)
+
+CI: GitHub Actions roda lint/format e testes a cada push/PR (badge no topo).
+
+🚀 Como Rodar
 1) Clonar o repositório
-
 git clone https://github.com/JaksonPascoal/pascoal-programador.git
 cd pascoal-programador
 
-2) Criar e ativar o ambiente virtual
-
-# (opcional, mas recomendado)
+2) (Opcional, recomendado) Criar e ativar o ambiente virtual
 python -m venv .venv
-
 # Windows
 .venv\Scripts\activate
-
 # Linux/Mac
 source .venv/bin/activate
 
-3) Instalar dependências e o pacote
-
+3) Instalar dependências e o pacote em modo editável
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-pip install -e .   # instala o pacote local em modo editável
+pip install -e .
 
-4) Executar os testes
-
+4) Rodar testes
 pytest -q
 
 5) Iniciar a aplicação web
-
 streamlit run app.py
 
-CLI — exemplos
+6) Usar a CLI
+pasqa --help
 
-# Normalizar um texto
-python -m pasqalib.cli --norm "  AGUA   E   VIDA  "
 
-# Contar palavras
-python -m pasqalib.cli --wc "Ola, mundo! Isto e um teste"
+Exemplos rápidos:
 
-# Gerar Fibonacci
-python -m pasqalib.cli --fib 12
-
-# Testar primo e próximo primo
-python -m pasqalib.cli --prime 97
-python -m pasqalib.cli --next-prime 14
-
-# Conceito da nota
-python -m pasqalib.cli --grade 95
+pasqa --norm "  ÁGUA   É   VIDA  "
+pasqa --freq "Olá, olá! água é vida. Água!" --top 5
 
 📂 Estrutura do Projeto
-
 .
-├── app.py                     # Aplicação web (Streamlit)
-├── requirements.txt           # Dependências
-├── pyproject.toml             # Metadados do pacote
+├── app.py                          # Aplicação web (Streamlit)
+├── requirements.txt                # Dependências
+├── pyproject.toml                  # Metadados do pacote + console script `pasqa`
 ├── src/
 │   └── pasqalib/
 │       ├── __init__.py
-│       ├── cli.py            # CLI (argparse)
-│       └── utils.py          # Funções utilitárias
-└── tests/
-    └── test_utils.py         # Testes com pytest
+│       ├── cli.py                  # CLI (argparse)
+│       └── utils.py                # Funções utilitárias (texto/algoritmos)
+├── tests/
+│   └── test_utils.py               # Testes com pytest
+└── .github/
+    └── workflows/
+        └── tests.yml               # CI: lint/format + pytest em cada push/PR
 
 🧠 Lições Aprendidas
 
-Reprodutibilidade: venv + requirements garantem ambiente limpo.
+Reprodutibilidade — venv + requirements garantem ambiente limpo.
 
-Qualidade: testes com pytest evitam regressões.
+Qualidade — testes com pytest evitam regressões ao evoluir código.
 
-Automação: CLI para rodar rotinas por terminal/servidor.
+Automação — CLI facilita rodar rotinas em terminal/servidor.
 
-Produto: Streamlit expõe as funções em interface web.
+Produto — Streamlit expõe as funções em uma interface amigável.
 
-Pré-processamento de texto: normalize_text e count_words (NLP/ETL).
+Pré-processamento de texto — normalize_text, count_words, word_freqs (NLP/ETL).
+
+CI/CD básico — GitHub Actions garante padrão de qualidade em cada PR.
 
 📄 Licença
 
 Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para detalhes.
-

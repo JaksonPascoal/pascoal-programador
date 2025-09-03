@@ -1,4 +1,4 @@
-from pasqalib.utils import normalize_text, fibonacci, is_prime, parse_grade, count_words, fibonacci_list, next_prime
+from pasqalib.utils import normalize_text, fibonacci, is_prime, parse_grade, count_words, fibonacci_list, next_prime, count_chars
 
 import pytest
 
@@ -55,3 +55,9 @@ def test_next_prime():
     assert next_prime(2) == 2
     assert next_prime(14) == 17
     assert next_prime(97) == 97
+
+def test_count_chars():
+    assert count_chars("") == 0
+    assert count_chars("Olá!") == 3      # "ola!" -> o,l,a
+    assert count_chars("A1 B2") == 4     # A,1,B,2
+    assert count_chars("  ÁGUA   É   VIDA  ") == 9  # "agua e vida" -> 9

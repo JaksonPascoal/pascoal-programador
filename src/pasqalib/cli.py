@@ -1,5 +1,6 @@
 import argparse
-from .utils import normalize_text, fibonacci, is_prime, parse_grade, count_words, next_prime
+from .utils import normalize_text, fibonacci, is_prime, parse_grade, count_words, count_chars, next_prime, fibonacci_list
+
 
 def main():
     parser = argparse.ArgumentParser(description="Kata CLI — Bloco 1")
@@ -9,8 +10,12 @@ def main():
     parser.add_argument("--grade", help="Converte nota (0-100) para conceito A+/A/B/C/D/F", type=int)
     parser.add_argument("--wc", help="Conta palavras do texto", type=str)
     parser.add_argument("--next-prime", help="Menor primo >= n", type=int)
+    parser.add_argument("--cc", help="Conta caracteres alfanuméricos do texto", type=str)
     args = parser.parse_args()
 
+
+    if args.cc is not None:
+        print(count_chars(args.cc))
     if args.next_prime is not None:
         print(next_prime(args.next_prime))
     if args.wc is not None:

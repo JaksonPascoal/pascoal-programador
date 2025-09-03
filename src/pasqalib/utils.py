@@ -1,22 +1,22 @@
+"""Utilitários do Bloco 1: limpeza de texto, Fibonacci, primalidade e regras de nota."""
+
 import math
 import re
 import unicodedata
 
 def normalize_text(s: str) -> str:
-    """Minúsculas, sem acentos extra, colapsa espaços."""
+    """Converte para minúsculas, remove acentos e colapsa espaços. Se `s` for None, retorna ""."""
     if s is None:
         return ""
-    # lower
     s = s.lower()
-    # remove diacríticos
     s = unicodedata.normalize("NFKD", s)
     s = "".join(ch for ch in s if not unicodedata.combining(ch))
-    # troca múltiplos espaços por 1
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
+
 def fibonacci(n: int) -> int:
-    """Retorna F(n). Define F(0)=0, F(1)=1. Uso de laço simples."""
+    """Retorna F(n) com F(0)=0 e F(1)=1. Lança ValueError para n<0."""
     if n < 0:
         raise ValueError("n deve ser >= 0")
     a, b = 0, 1
@@ -24,20 +24,22 @@ def fibonacci(n: int) -> int:
         a, b = b, a + b
     return a
 
+
 def is_prime(n: int) -> bool:
-    """Teste simples de primalidade para n >= 0."""
+    """Retorna True se `n` for primo. Usa verificação até ⌊√n⌋ e ignora pares (>2)."""
     if n < 2:
         return False
     if n % 2 == 0:
         return n == 2
     r = int(math.isqrt(n))
-    for k in range(3, r+1, 2):
+    for k in range(3, r + 1, 2):
         if n % k == 0:
             return False
     return True
 
+
 def parse_grade(score: int) -> str:
-    """Mapeia 0-100 em conceitos A+/A/B/C/D/F."""
+    """Mapeia nota 0–100 para A+/A/B/C/D/F. Lança ValueError se fora da faixa."""
     if not (0 <= score <= 100):
         raise ValueError("score deve estar entre 0 e 100")
     if score >= 95:
@@ -52,15 +54,17 @@ def parse_grade(score: int) -> str:
         return "D"
     return "F"
 
+
 def count_words(s: str) -> int:
-    """Conta palavras após normalizar (minúsculas, sem acentos, espaços colapsados)."""
+    """Conta palavras após normalizar (divide por espaços)."""
     s = normalize_text(s)
     if s == "":
         return 0
     return len(s.split())
 
+
 def fibonacci_list(k: int) -> list[int]:
-    """Retorna [F(0), F(1), ..., F(k)] (k >= 0)."""
+    """Retorna a sequência [F(0), ..., F(k)]. Lança ValueError para k<0."""
     if k < 0:
         raise ValueError("k deve ser >= 0")
     a, b = 0, 1
@@ -70,13 +74,18 @@ def fibonacci_list(k: int) -> list[int]:
         seq.append(a)
     return seq
 
+
 def next_prime(n: int) -> int:
-    """Retorna o menor primo >= n."""
+    """Retorna o menor primo ≥ n."""
     if n <= 2:
         return 2
-    x = n if n % 2 else n + 1   # começa no ímpar >= n
+    x = n if n % 2 else n + 1
     while not is_prime(x):
-        x += 2                   # pula só ímpares
+        x += 2
     return x
 
 
+def count_chars(s: str) -> int:
+    """Conta caracteres alfanuméricos após normalizar (letras e dígitos)."""
+    s = normalize_text(s)
+    return sum(ch.isalnum() for ch in s)

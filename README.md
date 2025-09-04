@@ -1,4 +1,4 @@
-Python Project Template: CLI, Tests & Streamlit
+# Python Project Template: CLI, Tests & Streamlit
 
 [![CI](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/JaksonPascoal/pascoal-programador/actions/workflows/tests.yml)
 

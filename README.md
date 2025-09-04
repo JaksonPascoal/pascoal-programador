@@ -152,17 +152,17 @@ Clean CSV:
 
 🧠 Aprendizado
 
-    Reprodutibilidade — venv + requirements garantem ambiente limpo.
+-Reprodutibilidade — venv + requirements garantem ambiente limpo.
 
-    Qualidade — testes com pytest evitam regressões ao evoluir código.
+-Qualidade — testes com pytest evitam regressões ao evoluir código.
 
-    Automação — CLI facilita rodar rotinas em terminal/servidor.
+-Automação — CLI facilita rodar rotinas em terminal/servidor.
 
-    Produto — Streamlit expõe as funções em interface amigável.
+-Produto — Streamlit expõe as funções em interface amigável.
 
-    Pré-processamento de texto — normalize_text, count_words, word_freqs (NLP/ETL).
+-Pré-processamento de texto — normalize_text, count_words, word_freqs (NLP/ETL).
 
-    CI/CD básico — GitHub Actions valida o projeto a cada PR/push.
+-CI/CD básico — GitHub Actions valida o projeto a cada PR/push.
 
 📄 Licença
 

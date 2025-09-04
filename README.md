@@ -1,6 +1,10 @@
-# Pascoal | Python Project Template: CLI, Tests & Streamlit
+Python Project Template: CLI, Tests & Streamlit
 
-Projeto didático focado em programação, testes e desenvolvimento web para explorar rotinas úteis de Data Science. É o primeiro bloco de estudo, cobrindo conceitos essenciais de Python e sua aplicação em um produto simples (CLI + App Web).
+
+
+
+Projeto didático focado em programação, testes e desenvolvimento web para explorar rotinas úteis de Data Science.
+É o primeiro bloco do estudo, cobrindo conceitos essenciais de Python e sua aplicação em um produto simples (CLI + App Web).
 
 📝 Sumário
 
@@ -18,19 +22,19 @@ Licença
 
 ✨ Funcionalidades
 
-O projeto tem três faces: pacote Python, CLI e App Web.
+O projeto tem três faces: um pacote Python, uma CLI e um App Web.
 
 Pacote Python (pasqalib)
 
 Texto / NLP básica
 
-normalize_text(s) — minúsculas, remove acentos, colapsa espaços.
+normalize_text(s) — deixa minúsculo, remove acentos e colapsa espaços.
 
 count_words(s) — conta palavras após normalizar.
 
-count_chars(s) — conta caracteres alfanuméricos (útil pra limpeza).
+count_chars(s) — conta caracteres alfanuméricos (útil para limpeza).
 
-word_freqs(s) — frequência de palavras (normaliza e ignora pontuação).
+word_freqs(s, top=None) — dicionário com frequência de palavras (normaliza e ignora pontuação; top opcional para top-N).
 
 Números / Algoritmos
 
@@ -38,13 +42,13 @@ fibonacci(n), fibonacci_list(n)
 
 is_prime(n), next_prime(n)
 
-Regras de negócio
+Regras de Negócio
 
 parse_grade(score) — converte nota 0–100 em conceito A+/A/B/C/D/F.
 
 CLI (Interface de Linha de Comando)
 
-Instalação em modo editável cria o comando pasqa:
+Instalar em modo editável cria o comando pasqa.
 
 pasqa --help
 
@@ -56,20 +60,22 @@ pasqa --wc   "Olá, mundo! Isto é um teste"
 pasqa --cc   "Água é vida!"
 pasqa --freq "Olá, olá! água é vida. Água!"         # dicionário de frequências
 pasqa --freq "Olá, olá! água é vida. Água!" --top 3 # top-N frequências
+
 pasqa --fib 12
 pasqa --prime 97
 pasqa --next-prime 14
 pasqa --grade 95
 
 
-Dica: se preferir, também funciona via módulo:
+Dica: também funciona via módulo:
+
 python -m pasqalib.cli --help
 
 App Web (Streamlit)
 
-Texto: normaliza e conta palavras.
+Texto: normaliza e conta palavras (com visualização das Top-N frequências).
 
-Números: Fibonacci e primos.
+Números: sequência de Fibonacci e teste/próximo primo.
 
 Notas: conceito a partir da nota.
 
@@ -79,9 +85,7 @@ Faz upload de CSV;
 
 Processa uma coluna de texto (normalização + contagem por linha);
 
-Gera frequências agregadas da coluna (Top 20 + download);
-
-Permite baixar o CSV processado.
+Gera frequências agregadas da coluna (exibe Top 20 + download do CSV processado).
 
 🛠️ Tecnologias
 
@@ -93,7 +97,9 @@ streamlit (aplicação web)
 
 pandas (manipulação de dados)
 
-CI: GitHub Actions roda lint/format e testes a cada push/PR (badge no topo).
+CI (GitHub Actions): roda pytest a cada push/PR (badge no topo).
+
+Formatação/checagens rápidas são feitas localmente com pre-commit.
 
 🚀 Como Rodar
 1) Clonar o repositório
@@ -120,10 +126,7 @@ streamlit run app.py
 
 6) Usar a CLI
 pasqa --help
-
-
-Exemplos rápidos:
-
+# exemplos rápidos:
 pasqa --norm "  ÁGUA   É   VIDA  "
 pasqa --freq "Olá, olá! água é vida. Água!" --top 5
 
@@ -141,7 +144,7 @@ pasqa --freq "Olá, olá! água é vida. Água!" --top 5
 │   └── test_utils.py               # Testes com pytest
 └── .github/
     └── workflows/
-        └── tests.yml               # CI: lint/format + pytest em cada push/PR
+        └── tests.yml               # CI: pytest em cada push/PR
 
 🧠 Lições Aprendidas
 
@@ -151,12 +154,14 @@ Qualidade — testes com pytest evitam regressões ao evoluir código.
 
 Automação — CLI facilita rodar rotinas em terminal/servidor.
 
-Produto — Streamlit expõe as funções em uma interface amigável.
+Produto — Streamlit expõe as funções em interface amigável.
 
 Pré-processamento de texto — normalize_text, count_words, word_freqs (NLP/ETL).
 
-CI/CD básico — GitHub Actions garante padrão de qualidade em cada PR.
+CI/CD básico — GitHub Actions valida o projeto a cada PR/push.
 
 📄 Licença
 
-Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para detalhes.
+Este projeto está licenciado sob a MIT License.
+Veja o arquivo LICENSE
+ para mais detalhes.

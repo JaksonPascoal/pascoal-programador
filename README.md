@@ -99,54 +99,54 @@ Clean CSV:
 🚀 Como Rodar
 1) Clonar o repositório
 
-git clone https://github.com/JaksonPascoal/pascoal-programador.git
-cd pascoal-programador
+        git clone https://github.com/JaksonPascoal/pascoal-programador.git
+        cd pascoal-programador
 
 2) (Opcional, recomendado) Criar e ativar o ambiente virtual
 
-python -m venv .venv
+        python -m venv .venv
 # Windows
-.venv\Scripts\activate
+        .venv\Scripts\activate
 # Linux/Mac
-source .venv/bin/activate
+        source .venv/bin/activate
 
 3) Instalar dependências e o pacote em modo editável
 
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-pip install -e .
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
 
 4) Rodar testes
 
-pytest -q
+        pytest -q
 
 5) Iniciar a aplicação web
 
-streamlit run app.py
+        streamlit run app.py
 
 6) Usar a CLI
 
-pasqa --help
+        pasqa --help
 # exemplos rápidos:
-pasqa --norm "  ÁGUA   É   VIDA  "
-pasqa --freq "Olá, olá! água é vida. Água!" --top 5
+        pasqa --norm "  ÁGUA   É   VIDA  "
+        pasqa --freq "Olá, olá! água é vida. Água!" --top 5
 
 📂 Estrutura do Projeto
 
-.
-├── app.py                          # Aplicação web (Streamlit)
-├── requirements.txt                # Dependências
-├── pyproject.toml                  # Metadados do pacote + console script `pasqa`
-├── src/
-│   └── pasqalib/
-│       ├── __init__.py
-│       ├── cli.py                  # CLI (argparse)
-│       └── utils.py                # Funções utilitárias (texto/algoritmos)
-├── tests/
-│   └── test_utils.py               # Testes com pytest
-└── .github/
-    └── workflows/
-        └── tests.yml               # CI: pytest em cada push/PR
+        .
+        ├── app.py                          # Aplicação web (Streamlit)
+        ├── requirements.txt                # Dependências
+        ├── pyproject.toml                  # Metadados do pacote + console script `pasqa`
+        ├── src/
+        │   └── pasqalib/
+        │       ├── __init__.py
+        │       ├── cli.py                  # CLI (argparse)
+        │       └── utils.py                # Funções utilitárias (texto/algoritmos)
+        ├── tests/
+        │   └── test_utils.py               # Testes com pytest
+        └── .github/
+            └── workflows/
+                └── tests.yml               # CI: pytest em cada push/PR
 
 
 🧠 Aprendizado

@@ -21,27 +21,27 @@ Projeto didático focado em programação, testes e desenvolvimento web para exp
 
 O projeto tem três faces: um pacote Python, uma CLI e um App Web.
 
-    Pacote Python (pasqalib)
+-Pacote Python (pasqalib)
 
-    Texto / NLP básica
+-Texto / NLP básica
 
-    normalize_text(s) — deixa minúsculo, remove acentos e colapsa espaços.
+-normalize_text(s) — deixa minúsculo, remove acentos e colapsa espaços.
 
-    count_words(s) — conta palavras após normalizar.
+-count_words(s) — conta palavras após normalizar.
 
-    count_chars(s) — conta caracteres alfanuméricos (útil para limpeza).
+-count_chars(s) — conta caracteres alfanuméricos (útil para limpeza).
 
-    word_freqs(s, top=None) — dicionário com frequência de palavras (normaliza e ignora pontuação; top opcional para top-N).
+-word_freqs(s, top=None) — dicionário com frequência de palavras (normaliza e ignora pontuação; top opcional para top-N).
 
 Números / Algoritmos
 
-    fibonacci(n), fibonacci_list(n)
+-fibonacci(n), fibonacci_list(n)
 
-    is_prime(n), next_prime(n)
+-is_prime(n), next_prime(n)
 
 Regras de Negócio
 
-    parse_grade(score) — converte nota 0–100 em conceito A+/A/B/C/D/F.
+-parse_grade(score) — converte nota 0–100 em conceito A+/A/B/C/D/F.
 
 CLI (Interface de Linha de Comando)
 
@@ -64,37 +64,37 @@ Exemplos:
 
 Dica: também funciona via módulo:
 
-python -m pasqalib.cli --help
+    python -m pasqalib.cli --help
 
 App Web (Streamlit)
 
-    Texto: normaliza e conta palavras (com visualização das Top-N frequências).
+-Texto: normaliza e conta palavras (com visualização das Top-N frequências).
 
-    Números: sequência de Fibonacci e teste/próximo primo.
+-Números: sequência de Fibonacci e teste/próximo primo.
 
-    Notas: conceito a partir da nota.
+-Notas: conceito a partir da nota.
 
 Clean CSV:
 
-    Faz upload de CSV;
+-Faz upload de CSV;
 
-    Processa uma coluna de texto (normalização + contagem por linha);
+-Processa uma coluna de texto (normalização + contagem por linha);
 
-    Gera frequências agregadas da coluna (exibe Top 20 + download do CSV processado).
+-Gera frequências agregadas da coluna (exibe Top 20 + download do CSV processado).
 
 🛠️ Tecnologias
 
-    Python 3.11+
+-Python 3.11+
 
-    pytest (testes)
+-pytest (testes)
 
-    streamlit (aplicação web)
+-streamlit (aplicação web)
 
-    pandas (manipulação de dados)
+-pandas (manipulação de dados)
 
-    CI (GitHub Actions): roda pytest a cada push/PR (badge no topo).
+-CI (GitHub Actions): roda pytest a cada push/PR (badge no topo).
 
-        Formatação/checagens rápidas são feitas localmente com pre-commit.
+-Formatação/checagens rápidas são feitas localmente com pre-commit.
 
 🚀 Como Rodar
 1) Clonar o repositório
@@ -127,6 +127,7 @@ Clean CSV:
 6) Usar a CLI
 
         pasqa --help
+   
 # exemplos rápidos:
         pasqa --norm "  ÁGUA   É   VIDA  "
         pasqa --freq "Olá, olá! água é vida. Água!" --top 5

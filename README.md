@@ -39,6 +39,14 @@ Números / Algoritmos
 
 -is_prime(n), next_prime(n)
 
+Análise de Dados / Estatística (🆕 v0.3.0)
+
+-stats_summary(numbers) — estatísticas descritivas completas (média, mediana, moda, desvio padrão, quartis)
+
+-detect_outliers(numbers, method) — detecta outliers usando IQR ou Z-Score
+
+-correlation_pearson(x, y) — correlação de Pearson entre duas séries
+
 Regras de Negócio
 
 -parse_grade(score) — converte nota 0–100 em conceito A+/A/B/C/D/F.
@@ -62,9 +70,18 @@ Exemplos:
     pasqa --next-prime 14
     pasqa --grade 95
 
+    # 🆕 Novos comandos v0.3.0 - Análise de Dados
+    pasqa --stats "1,2,3,4,5,6,7,8,9,10"                # estatísticas descritivas
+    pasqa --outliers "1,2,3,4,5,100" --method iqr       # detecção de outliers (IQR)
+    pasqa --outliers "1,2,3,4,5,100" --method zscore    # detecção de outliers (Z-Score)
+    pasqa --corr "1,2,3,4,5;2,4,6,8,10"                 # correlação entre séries
+
 Dica: também funciona via módulo:
 
     python -m pasqalib.cli --help
+    
+    # Exemplos com módulo (útil para desenvolvimento)
+    python -c "import sys; sys.path.insert(0, './src'); from pasqalib.cli import main; main()" --stats "1,2,3,4,5"
 
 App Web (Streamlit)
 

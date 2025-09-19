@@ -1,7 +1,7 @@
 [project]
 name = "pasqalib"
-version = "0.2.0"
-description = "Utilitários de texto e números (Bloco 1)"
+version = "0.3.0"
+description = "Utilitários de texto, números e análise de dados (Bloco 1 + Stats)"
 requires-python = ">=3.11"
 
 # ⇩⇩⇩ ESTE BLOCO CRIA O COMANDO "pasqa"

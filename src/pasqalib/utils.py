@@ -4,6 +4,7 @@ import math
 import re
 import unicodedata
 from collections import Counter
+from typing import Union
 
 
 def normalize_text(s: str) -> str:
@@ -108,3 +109,148 @@ def word_freqs(s: str) -> dict[str, int]:
 
     tokens = s.split()  # divide por qualquer quantidade de espaços
     return dict(Counter(tokens))
+
+
+def stats_summary(numbers: list[Union[int, float]]) -> dict[str, float]:
+    """Calcula estatísticas descritivas de uma lista de números.
+    
+    Args:
+        numbers: Lista de números (int ou float)
+    
+    Returns:
+        Dict com mean, median, mode, std_dev, min, max, q1, q3
+    
+    Raises:
+        ValueError: Se a lista estiver vazia
+    """
+    if not numbers:
+        raise ValueError("Lista não pode estar vazia")
+    
+    n = len(numbers)
+    sorted_nums = sorted(numbers)
+    
+    # Média
+    mean = sum(numbers) / n
+    
+    # Mediana
+    if n % 2 == 0:
+        median = (sorted_nums[n//2 - 1] + sorted_nums[n//2]) / 2
+    else:
+        median = sorted_nums[n//2]
+    
+    # Moda (valor mais frequente)
+    freq_count = Counter(numbers)
+    max_freq = max(freq_count.values())
+    modes = [k for k, v in freq_count.items() if v == max_freq]
+    mode = modes[0] if len(modes) == 1 else None
+    
+    # Desvio padrão
+    variance = sum((x - mean) ** 2 for x in numbers) / n
+    std_dev = math.sqrt(variance)
+    
+    # Quartis
+    def quartile(data, q):
+        index = (len(data) - 1) * q
+        if index == int(index):
+            return data[int(index)]
+        else:
+            lower = data[int(index)]
+            upper = data[int(index) + 1]
+            return lower + (upper - lower) * (index - int(index))
+    
+    q1 = quartile(sorted_nums, 0.25)
+    q3 = quartile(sorted_nums, 0.75)
+    
+    return {
+        "count": n,
+        "mean": round(mean, 4),
+        "median": median,
+        "mode": mode,
+        "std_dev": round(std_dev, 4),
+        "min": min(numbers),
+        "max": max(numbers),
+        "q1": q1,
+        "q3": q3,
+        "range": max(numbers) - min(numbers)
+    }
+
+
+def detect_outliers(numbers: list[Union[int, float]], method: str = "iqr") -> dict:
+    """Detecta outliers em uma lista de números.
+    
+    Args:
+        numbers: Lista de números
+        method: Método de detecção ("iqr" ou "zscore")
+    
+    Returns:
+        Dict com outliers detectados e estatísticas
+    """
+    if not numbers:
+        raise ValueError("Lista não pode estar vazia")
+    
+    if method == "iqr":
+        stats = stats_summary(numbers)
+        q1, q3 = stats["q1"], stats["q3"]
+        iqr = q3 - q1
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        
+        outliers = [x for x in numbers if x < lower_bound or x > upper_bound]
+        
+        return {
+            "method": "IQR",
+            "outliers": outliers,
+            "count": len(outliers),
+            "lower_bound": round(lower_bound, 4),
+            "upper_bound": round(upper_bound, 4),
+            "percentage": round(len(outliers) / len(numbers) * 100, 2)
+        }
+    
+    elif method == "zscore":
+        stats = stats_summary(numbers)
+        mean, std_dev = stats["mean"], stats["std_dev"]
+        
+        z_scores = [(x - mean) / std_dev for x in numbers]
+        outliers = [numbers[i] for i, z in enumerate(z_scores) if abs(z) > 2]
+        
+        return {
+            "method": "Z-Score",
+            "outliers": outliers,
+            "count": len(outliers),
+            "threshold": 2,
+            "percentage": round(len(outliers) / len(numbers) * 100, 2)
+        }
+    
+    else:
+        raise ValueError("Método deve ser 'iqr' ou 'zscore'")
+
+
+def correlation_pearson(x: list[Union[int, float]], y: list[Union[int, float]]) -> float:
+    """Calcula correlação de Pearson entre duas séries.
+    
+    Args:
+        x, y: Listas de números do mesmo tamanho
+    
+    Returns:
+        Coeficiente de correlação (-1 a 1)
+    """
+    if len(x) != len(y):
+        raise ValueError("As listas devem ter o mesmo tamanho")
+    
+    if len(x) < 2:
+        raise ValueError("Precisam de pelo menos 2 valores")
+    
+    n = len(x)
+    mean_x = sum(x) / n
+    mean_y = sum(y) / n
+    
+    numerator = sum((x[i] - mean_x) * (y[i] - mean_y) for i in range(n))
+    sum_sq_x = sum((x[i] - mean_x) ** 2 for i in range(n))
+    sum_sq_y = sum((y[i] - mean_y) ** 2 for i in range(n))
+    
+    denominator = math.sqrt(sum_sq_x * sum_sq_y)
+    
+    if denominator == 0:
+        return 0.0
+    
+    return round(numerator / denominator, 4)

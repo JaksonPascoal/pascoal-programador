@@ -85,33 +85,41 @@ Dica: também funciona via módulo:
 
 App Web (Streamlit)
 
--Texto: normaliza e conta palavras (com visualização das Top-N frequências).
+-**Texto**: normaliza e conta palavras (com visualização das Top-N frequências).
 
--Números: sequência de Fibonacci e teste/próximo primo.
+-**Números**: sequência de Fibonacci e teste/próximo primo.
 
--Notas: conceito a partir da nota.
+-**Notas**: conceito a partir da nota.
 
-Clean CSV:
+-**Clean CSV**: Faz upload de CSV, processa uma coluna de texto (normalização + contagem por linha), gera frequências agregadas da coluna (exibe Top 20 + download do CSV processado).
 
--Faz upload de CSV;
-
--Processa uma coluna de texto (normalização + contagem por linha);
-
--Gera frequências agregadas da coluna (exibe Top 20 + download do CSV processado).
+-**🆕 Análise de Dados (v0.3.0)**: Nova aba com funcionalidades estatísticas completas:
+  - Upload de datasets CSV
+  - Estatísticas descritivas automáticas (média, mediana, desvio padrão, quartis)
+  - Detecção visual de outliers (métodos IQR e Z-Score)
+  - Matriz de correlação interativa com heatmap
+  - Gráficos de distribuição e dispersão
+  - Download de dados processados
 
 🛠️ Tecnologias
 
--Python 3.11+
+-**Python 3.11+**
 
--pytest (testes)
+-**pytest** (testes unitários)
 
--streamlit (aplicação web)
+-**streamlit** (aplicação web interativa)
 
--pandas (manipulação de dados)
+-**pandas** (manipulação de dados)
 
--CI (GitHub Actions): roda pytest a cada push/PR (badge no topo).
+-**🆕 scipy** (funções estatísticas avançadas - v0.3.0)
 
--Formatação/checagens rápidas são feitas localmente com pre-commit.
+-**🆕 plotly** (visualizações interativas - v0.3.0)
+
+-**🆕 openpyxl** (suporte a arquivos Excel - v0.3.0)
+
+-**CI/CD** (GitHub Actions): roda pytest a cada push/PR (badge no topo).
+
+-**Formatação/checagens** rápidas são feitas localmente com pre-commit.
 
 🚀 Como Rodar
 1) Clonar o repositório
@@ -141,6 +149,12 @@ Clean CSV:
 
         streamlit run app.py
 
+   **🆕 Alternativa para Deploy (v0.3.0)**:
+   
+        streamlit run app_standalone.py
+        
+   *(versão standalone sem dependências de pacote instalado - ideal para deploy em nuvem)*
+
 6) Usar a CLI
 
         pasqa --help
@@ -153,15 +167,21 @@ Clean CSV:
 
         .
         ├── app.py                          # Aplicação web (Streamlit)
-        ├── requirements.txt                # Dependências
+        ├── app_standalone.py               # 🆕 Versão standalone para deploy (v0.3.0)
+        ├── requirements.txt                # Dependências principais
+        ├── requirements_deploy.txt         # 🆕 Dependências mínimas para deploy (v0.3.0)
         ├── pyproject.toml                  # Metadados do pacote + console script `pasqa`
+        ├── DEPLOY.md                       # 🆕 Guia de deployment (v0.3.0)
+        ├── CHANGELOG.md                    # 🆕 Histórico de versões (v0.3.0)
         ├── src/
         │   └── pasqalib/
         │       ├── __init__.py
-        │       ├── cli.py                  # CLI (argparse)
-        │       └── utils.py                # Funções utilitárias (texto/algoritmos)
+        │       ├── cli.py                  # CLI (argparse) + novos comandos estatísticos
+        │       └── utils.py                # Funções utilitárias (texto/algoritmos/estatística)
         ├── tests/
-        │   └── test_utils.py               # Testes com pytest
+        │   └── test_utils.py               # Testes com pytest (incluindo novas funções)
+        ├── .streamlit/
+        │   └── config.toml                 # 🆕 Configuração Streamlit (v0.3.0)
         └── .github/
             └── workflows/
                 └── tests.yml               # CI: pytest em cada push/PR
@@ -169,17 +189,52 @@ Clean CSV:
 
 🧠 Aprendizado
 
-Reprodutibilidade — venv + requirements garantem ambiente limpo.
+**Reprodutibilidade** — venv + requirements garantem ambiente limpo.
 
-Qualidade — testes com pytest evitam regressões ao evoluir código.
+**Qualidade** — testes com pytest evitam regressões ao evoluir código.
 
-Automação — CLI facilita rodar rotinas em terminal/servidor.
+**Automação** — CLI facilita rodar rotinas em terminal/servidor.
 
-Produto — Streamlit expõe as funções em interface amigável.
+**Produto** — Streamlit expõe as funções em interface amigável.
 
-Pré-processamento de texto — normalize_text, count_words, word_freqs (NLP/ETL).
+**Pré-processamento de texto** — normalize_text, count_words, word_freqs (NLP/ETL).
 
-CI/CD básico — GitHub Actions valida o projeto a cada PR/push.
+**🆕 Análise Estatística (v0.3.0)** — stats_summary, detect_outliers, correlation_pearson (Data Science).
+
+**🆕 Visualização de Dados (v0.3.0)** — Plotly para gráficos interativos e análise exploratória.
+
+**🆕 Deploy Facilitado (v0.3.0)** — Versão standalone e guias para implantação em nuvem.
+
+**CI/CD básico** — GitHub Actions valida o projeto a cada PR/push.
+
+## 🎯 **Exemplos Avançados v0.3.0**
+
+### **Análise Estatística via CLI:**
+```bash
+# Dataset de vendas mensais
+pasqa --stats "1200,1350,1180,1420,1390,1250,1600,1550,1480,1320,1290,1450"
+
+# Detectar meses com vendas anômalas
+pasqa --outliers "1200,1350,1180,1420,1390,1250,2800,1550,1480,1320,1290,1450" --method iqr
+
+# Correlação entre temperatura e vendas de sorvete
+pasqa --corr "25,28,32,30,35,38,40,42,38,35,30,28;120,135,180,142,195,250,280,300,245,200,150,130"
+```
+
+### **Casos de Uso Web (Streamlit):**
+- **Análise de Datasets**: Upload de CSV de vendas, análise automática de outliers
+- **Correlações**: Verificar relação entre variáveis (preço vs demanda, idade vs renda)
+- **Limpeza de Texto**: Processar comentários de clientes, extrair palavras-chave
+- **Dashboard Estatístico**: Visualizar distribuições, identificar padrões
+
+### **Deploy Rápido:**
+```bash
+# Testar localmente
+streamlit run app_standalone.py
+
+# Deploy em plataformas como Streamlit Cloud, Heroku, Railway
+# Usar requirements_deploy.txt para dependências mínimas
+```
 
 📄 Licença
 

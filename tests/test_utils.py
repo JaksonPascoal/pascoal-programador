@@ -10,6 +10,9 @@ from pasqalib.utils import (
     normalize_text,
     parse_grade,
     word_freqs,
+    stats_summary,
+    detect_outliers,
+    correlation_pearson,
 )
 
 
@@ -68,4 +71,55 @@ def test_word_freqs():
     assert word_freqs("") == {}
     assert word_freqs("Olá, olá!") == {"ola": 2}
     assert word_freqs("Água é vida. Água!") == {"agua": 2, "e": 1, "vida": 1}
+
+
+def test_stats_summary():
+    numbers = [1, 2, 3, 4, 5]
+    stats = stats_summary(numbers)
+    assert stats["mean"] == 3.0
+    assert stats["median"] == 3
+    assert stats["min"] == 1
+    assert stats["max"] == 5
+    assert stats["count"] == 5
+    
+    # Teste com lista vazia
+    with pytest.raises(ValueError):
+        stats_summary([])
+
+
+def test_detect_outliers():
+    # Dados com outliers óbvios
+    numbers = [1, 2, 3, 4, 5, 100]  # 100 é outlier
+    
+    # Teste IQR
+    outliers_iqr = detect_outliers(numbers, method="iqr")
+    assert outliers_iqr["method"] == "IQR"
+    assert 100 in outliers_iqr["outliers"]
+    
+    # Teste Z-score
+    outliers_zscore = detect_outliers(numbers, method="zscore")
+    assert outliers_zscore["method"] == "Z-Score"
+    
+    # Teste com método inválido
+    with pytest.raises(ValueError):
+        detect_outliers(numbers, method="invalid")
+
+
+def test_correlation_pearson():
+    # Correlação perfeita positiva
+    x = [1, 2, 3, 4, 5]
+    y = [2, 4, 6, 8, 10]
+    assert correlation_pearson(x, y) == 1.0
+    
+    # Correlação perfeita negativa
+    y_neg = [10, 8, 6, 4, 2]
+    assert correlation_pearson(x, y_neg) == -1.0
+    
+    # Teste com listas de tamanhos diferentes
+    with pytest.raises(ValueError):
+        correlation_pearson([1, 2], [1, 2, 3])
+    
+    # Teste com menos de 2 valores
+    with pytest.raises(ValueError):
+        correlation_pearson([1], [1])
 

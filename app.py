@@ -1,23 +1,39 @@
 import pandas as pd
 import streamlit as st
+import sys
+import os
 
-from pasqalib.utils import (
-    count_words,
-    fibonacci,
-    fibonacci_list,
-    is_prime,
-    next_prime,
-    normalize_text,  # agora com word_freqs
-    parse_grade,
-    word_freqs,
-)
+# Adicionar o diretório src ao path para imports locais
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(current_dir, 'src')
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
+
+try:
+    from pasqalib.utils import (
+        count_words,
+        fibonacci,
+        fibonacci_list,
+        is_prime,
+        next_prime,
+        normalize_text,  # agora com word_freqs
+        parse_grade,
+        word_freqs,
+        stats_summary,
+        detect_outliers,
+        correlation_pearson,
+    )
+except ImportError as e:
+    st.error(f"❌ Erro ao importar módulo pasqalib: {e}")
+    st.error("Certifique-se de que o pacote está instalado corretamente ou que o código está na estrutura correta.")
+    st.stop()
 
 # 1ª chamada Streamlit
 st.set_page_config(page_title="Pascoal | Python Project Template", page_icon="📊", layout="centered")
 st.title("Python Project Template — CLI, Tests & Streamlit")
-st.caption("JkPascoal")
+st.caption("JkPascoal | v0.3.0 - Data Insights Version")
 
-tabs = st.tabs(["📝 Texto", "🔢 Números", "🏷️ Notas", "🧼 Clean CSV"])
+tabs = st.tabs(["📝 Texto", "🔢 Números", "🏷️ Notas", "📊 Análise de Dados", "🧼 Clean CSV"])
 
 # --- Texto ---
 with tabs[0]:
@@ -52,8 +68,136 @@ with tabs[2]:
     score = st.number_input("Nota (0–100)", min_value=0, max_value=100, value=95, step=1)
     st.write("Conceito:", parse_grade(int(score)))
 
-# --- Clean CSV ---
+# --- Análise de Dados ---
 with tabs[3]:
+    st.subheader("📊 Análise Estatística de Dados")
+    
+    # Input de dados
+    st.write("**Entrada de Dados:**")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Opção 1: Inserir manualmente
+        st.write("*Opção 1: Inserir números*")
+        numbers_input = st.text_area(
+            "Digite números separados por vírgula:",
+            value="1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+            height=100
+        )
+        
+    with col2:
+        # Opção 2: Gerar dados aleatórios
+        st.write("*Opção 2: Gerar dados aleatórios*")
+        n_random = st.number_input("Quantidade de números:", min_value=5, max_value=1000, value=50, step=5)
+        if st.button("🎲 Gerar dados aleatórios"):
+            import random
+            random_numbers = [round(random.uniform(1, 100), 2) for _ in range(n_random)]
+            numbers_input = ", ".join(map(str, random_numbers))
+            st.rerun()
+    
+    # Processar dados
+    if numbers_input.strip():
+        try:
+            # Parse dos números
+            numbers = [float(x.strip()) for x in numbers_input.replace(',', ' ').split() if x.strip()]
+            
+            if len(numbers) < 2:
+                st.error("⚠️ É necessário pelo menos 2 números para análise.")
+            else:
+                st.success(f"✅ {len(numbers)} números carregados com sucesso!")
+                
+                # Visualização dos dados
+                st.write("**Dados carregados:**")
+                st.write(f"Primeiros 10: {numbers[:10]}")
+                if len(numbers) > 10:
+                    st.write(f"... e mais {len(numbers) - 10} números")
+                
+                # Divisor
+                st.divider()
+                
+                # Estatísticas Descritivas
+                st.write("**📊 Estatísticas Descritivas:**")
+                stats = stats_summary(numbers)
+                
+                # Métricas em colunas
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric("Média", f"{stats['mean']:.2f}")
+                    st.metric("Mediana", f"{stats['median']:.2f}")
+                with col2:
+                    st.metric("Mínimo", f"{stats['min']:.2f}")
+                    st.metric("Máximo", f"{stats['max']:.2f}")
+                with col3:
+                    st.metric("Desvio Padrão", f"{stats['std_dev']:.2f}")
+                    st.metric("Range", f"{stats['range']:.2f}")
+                with col4:
+                    st.metric("Q1 (25%)", f"{stats['q1']:.2f}")
+                    st.metric("Q3 (75%)", f"{stats['q3']:.2f}")
+                
+                # Tabela completa
+                with st.expander("📋 Ver todas as estatísticas"):
+                    stats_df = pd.DataFrame([stats]).T
+                    stats_df.columns = ["Valor"]
+                    st.dataframe(stats_df, use_container_width=True)
+                
+                st.divider()
+                
+                # Detecção de Outliers
+                st.write("**🔍 Detecção de Outliers:**")
+                outlier_method = st.selectbox("Método:", ["iqr", "zscore"], index=0)
+                
+                outliers_info = detect_outliers(numbers, method=outlier_method)
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric("Outliers Detectados", outliers_info["count"])
+                    st.metric("Percentual", f"{outliers_info['percentage']:.1f}%")
+                
+                with col2:
+                    if outliers_info["count"] > 0:
+                        st.write("**Valores outliers:**")
+                        outliers_display = outliers_info["outliers"][:5]  # Mostrar apenas os primeiros 5
+                        st.code(str(outliers_display))
+                        if len(outliers_info["outliers"]) > 5:
+                            st.caption(f"... e mais {len(outliers_info['outliers']) - 5} outliers")
+                
+                # Mostrar limites
+                if outlier_method == "iqr" and outliers_info["count"] > 0:
+                    st.write(f"**Limites IQR:** {outliers_info['lower_bound']:.2f} a {outliers_info['upper_bound']:.2f}")
+                
+                st.divider()
+                
+                # Histograma simples (usando Streamlit)
+                st.write("**📈 Distribuição dos Dados:**")
+                hist_data = pd.DataFrame({"valores": numbers})
+                st.bar_chart(hist_data["valores"].value_counts().sort_index())
+                
+                # Análise de Correlação (se houver dados suficientes)
+                if len(numbers) >= 10:
+                    st.divider()
+                    st.write("**🔗 Análise de Correlação:**")
+                    st.write("*Correlação com sequência numérica (1, 2, 3, ...)*")
+                    
+                    sequence = list(range(1, len(numbers) + 1))
+                    try:
+                        corr = correlation_pearson(numbers, sequence)
+                        st.metric("Correlação de Pearson", f"{corr:.4f}")
+                        
+                        if abs(corr) > 0.7:
+                            st.success("📈 Forte correlação detectada!")
+                        elif abs(corr) > 0.3:
+                            st.info("📊 Correlação moderada")
+                        else:
+                            st.warning("📉 Correlação fraca")
+                    except Exception as e:
+                        st.error(f"Erro no cálculo de correlação: {e}")
+                
+        except ValueError as e:
+            st.error(f"❌ Erro ao processar números: {e}")
+            st.error("Certifique-se de inserir apenas números separados por vírgula ou espaço.")
+
+# --- Clean CSV ---
+with tabs[4]:
     st.subheader("Limpeza de coluna de texto (CSV)")
 
     up = st.file_uploader("Envie um arquivo .csv", type=["csv"])
